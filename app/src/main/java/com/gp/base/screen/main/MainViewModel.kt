@@ -2,17 +2,16 @@ package com.gp.base.screen.main
 
 import androidx.lifecycle.*
 import com.gp.base.app.App
-import com.gp.base.network.model.Project
-import com.gp.base.network.repository.ProjectRepository
-import retrofit2.Retrofit
-import timber.log.Timber
+import com.gp.base.network.model.ApiResponse
+import com.gp.base.network.model.Delivery
+import com.gp.base.network.repository.DeliveryRepository
 import javax.inject.Inject
 
 class MainViewModel : ViewModel(),
     LifecycleObserver {
 
     @Inject
-    lateinit var projectRepository: ProjectRepository
+    lateinit var deliveryRepository: DeliveryRepository
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
@@ -27,7 +26,7 @@ class MainViewModel : ViewModel(),
             .inject(this)
     }
 
-    fun getProjectList() : LiveData<List<Project>> {
-        return projectRepository.getProjectList("JakeWharton")
+    fun getProjectList(offset: Int, limit: Int = 20): LiveData<ApiResponse<List<Delivery>>> {
+        return deliveryRepository.getDeliveries(offset, limit)
     }
 }

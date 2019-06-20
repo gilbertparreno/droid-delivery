@@ -24,6 +24,9 @@ abstract class BaseActivity<T : ViewModel> : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initView()
         initViewModel()
     }
+
+    abstract fun initView()
 }
