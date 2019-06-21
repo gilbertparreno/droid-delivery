@@ -21,7 +21,7 @@ class App : Application() {
         }
 
         appComponent = DaggerAppComponent.builder()
-            .networkModule(NetworkModule("https://mock-api-mobile.dev.lalamove.com", BuildConfig.DEBUG))
+            .networkModule(NetworkModule(this, "https://mock-api-mobile.dev.lalamove.com", BuildConfig.DEBUG))
             .appModule(AppModule(this))
             .build()
     }

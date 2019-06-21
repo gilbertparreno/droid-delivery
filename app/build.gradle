@@ -27,37 +27,56 @@ android {
         targetCompatibility = '1.8'
     }
     buildToolsVersion = '28.0.3'
+
+    androidExtensions {
+        experimental = true
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Android
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha05'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha06'
     implementation 'androidx.core:core-ktx:1.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.google.android.material:material:1.0.0-rc01'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
+    // dagger
     implementation "com.google.dagger:dagger:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
-
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_gson_version"
-    implementation  "com.squareup.okhttp3:okhttp:3.14.2"
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.14.2'
-
-    implementation 'com.jakewharton.timber:timber:4.7.1'
-
-    implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
+    // network
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_gson_version"
+    implementation "com.squareup.okhttp3:okhttp:3.14.2"
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.14.2'
+
+    // timber
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    // rxjava
     implementation "io.reactivex.rxjava2:rxandroid:$rx_android"
     implementation "io.reactivex.rxjava2:rxjava:$rx_java"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_adapter_version"
 
+    // picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    // custom progress ui
+    implementation 'com.wang.avi:library:2.1.3'
 }

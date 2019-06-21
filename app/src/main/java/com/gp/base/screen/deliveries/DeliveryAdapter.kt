@@ -1,4 +1,4 @@
-package com.gp.base.screen.main
+package com.gp.base.screen.deliveries
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,15 +7,20 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.gp.base.R
 import com.gp.base.network.model.Delivery
+import com.gp.base.utils.CircleTransform
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_delivery.view.*
 
-class DeliveryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class DeliveryAdapter(val itemClickListener: OnItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val ITEM = 0
     private val PROGRESS = 1
 
     private var deliveries = mutableListOf<Delivery>()
+
+    interface OnItemClickListener {
+        fun onItemClick(item: Delivery)
+    }
 
     fun addItems(newDeliveries: List<Delivery>) {
         if (deliveries.isNotEmpty() && deliveries.last().id == -1) {
@@ -35,7 +40,7 @@ class DeliveryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when(viewType) {
+        return when (viewType) {
             ITEM -> ItemViewHolder(parent.inflate(R.layout.item_delivery, false))
             else -> ProgressViewHolder(parent.inflate(R.layout.item_progress, false))
         }
@@ -56,12 +61,17 @@ class DeliveryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var view: View = itemView
+
 
         fun bind(delivery: Delivery) {
             view.tvDescription.text = "${delivery.id} ${delivery.description}"
-            Picasso.get().load(delivery.imageUrl).resize(100, 100).centerCrop().into(view.imgDelivery)
+            Picasso.get().load(delivery.imageUrl).transform(CircleTransform()).resize(100, 100).centerCrop().into(view.imgDelivery)
+
+            view.setOnClickListener {
+                itemClickListener.onItemClick(delivery)
+            }
         }
     }
 

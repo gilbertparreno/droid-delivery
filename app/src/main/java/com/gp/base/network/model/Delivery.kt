@@ -1,8 +1,11 @@
 package com.gp.base.network.model
 
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Delivery(
     @SerializedName("imageUrl")
     val imageUrl: String = "",
@@ -12,11 +15,12 @@ data class Delivery(
     val location: Location?,
     @SerializedName("id")
     val id: Int
-) {
+) : Parcelable {
     constructor(id: Int = -1) : this(id = id, location = null)
 }
 
 
+@Parcelize
 data class Location(
     @SerializedName("address")
     val address: String,
@@ -24,4 +28,4 @@ data class Location(
     val lng: Double,
     @SerializedName("lat")
     val lat: Double
-)
+) : Parcelable

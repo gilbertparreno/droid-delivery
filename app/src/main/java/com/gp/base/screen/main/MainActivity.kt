@@ -1,65 +1,53 @@
 package com.gp.base.screen.main
 
 import android.os.Bundle
-import android.widget.Toast
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.lifecycle.ViewModelProviders
 import com.gp.base.R
 import com.gp.base.app.App
-import com.gp.base.network.model.ApiResponse
-import com.gp.base.network.model.Delivery
 import com.gp.base.screen.base.BaseActivity
+import com.gp.base.screen.deliveries.FragmentDeliveries
 import kotlinx.android.synthetic.main.activity_main.*
+import timber.log.Timber
 
 class MainActivity : BaseActivity<MainViewModel>() {
 
-    private val adapter = DeliveryAdapter()
-    private var isFetchingData = false
-    private var endReached = false
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setContentView(R.layout.activity_main)
         super.onCreate(savedInstanceState)
-        viewModel.init(application as App)
-        getDeliveries()
-    }
+        setContentView(R.layout.activity_main)
 
-    override fun initView() {
-        rvDeliveries.adapter = adapter
-        rvDeliveries.layoutManager = LinearLayoutManager(this)
-        setRecyclerViewScrollListener()
-    }
+        DaggerMainComponent.builder()
+            .appComponent((application as App).appComponent)
+            .mainModule(MainModule())
+            .build()
+            .inject(this)
 
-    private val lastVisibleItemPosition: Int
-        get() = (rvDeliveries.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+        val viewModel = ViewModelProviders.of(this)[DeliveryDetailsViewModel::class.java]
 
-    private fun setRecyclerViewScrollListener() {
-        rvDeliveries.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                val totalItemCount = recyclerView.layoutManager!!.itemCount
-                if (!endReached && !isFetchingData && totalItemCount == lastVisibleItemPosition + 1) {
-                    getDeliveries(lastVisibleItemPosition)
-                }
+        setSupportActionBar(toolbar)
+        supportFragmentManager.apply {
+            beginTransaction().apply {
+                replace(R.id.fragmentContainer, FragmentDeliveries(), FragmentDeliveries.TAG)
+                    .commit()
+
             }
-        })
-    }
-
-    private fun getDeliveries(offset: Int = 0) {
-        isFetchingData = true
-        viewModel.getProjectList(offset).observe(
-            this,
-            Observer<ApiResponse<List<Delivery>>> {
-                response ->
-                isFetchingData = false
-                if (response.throwable != null) {
-                    Toast.makeText(this, "Something went wrong!", Toast.LENGTH_SHORT).show()
+            addOnBackStackChangedListener {
+                val count = backStackEntryCount
+                if (count > 0) {
+                    toolbar.setTitle(R.string.title_delivery_details)
                 } else {
-                    endReached = response.data!!.isEmpty()
-                    adapter.addItems(response.data!!)
+                    toolbar.setTitle(R.string.app_name)
                 }
+
+                supportActionBar?.setDisplayHomeAsUpEnabled(count > 0)
+                supportActionBar?.setDisplayShowHomeEnabled(count > 0)
             }
-        )
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

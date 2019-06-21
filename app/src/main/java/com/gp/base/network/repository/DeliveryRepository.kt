@@ -11,32 +11,18 @@ import io.reactivex.schedulers.Schedulers
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import timber.log.Timber
+import javax.inject.Inject
 
-class DeliveryRepository(retrofit: Retrofit) : DeliveryRepositoryContract {
-
-    private var deliveryService = retrofit.create(DeliveryService::class.java)
+class DeliveryRepository @Inject constructor(private val deliveryService: DeliveryService) : DeliveryRepositoryContract {
 
     private var disposable = CompositeDisposable()
 
-    override fun getDeliveries(offset: Int, limit: Int): LiveData<ApiResponse<List<Delivery>>> {
-        var mutableLiveData = MutableLiveData<ApiResponse<List<Delivery>>>()
-        disposable.add(
-            deliveryService
-                .getDeliveries(offset, limit)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ data ->
-                    mutableLiveData.postValue(ApiResponse(data = data))
-                }) { throwable ->
-                    Timber.d(throwable)
-                    if (throwable is HttpException && throwable.code() == 500) {
-                        mutableLiveData.postValue(ApiResponse(data = listOf()))
-                    } else {
-                        mutableLiveData.postValue(ApiResponse(throwable = throwable))
-                    }
-                }
-        )
+//    override fun getDeliveries(offset: Int, limit: Int): LiveData<ApiResponse<List<Delivery>>> {
+//        var mutableLiveData = MutableLiveData<ApiResponse<List<Delivery>>>()
 
-        return mutableLiveData
-    }
+//
+//        return mutableLiveData
+//    }
+
+    override fun getDeliveries(offset: Int, limit: Int) = deliveryService.getDeliveries(offset, limit)
 }
