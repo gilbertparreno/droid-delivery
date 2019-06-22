@@ -9,7 +9,7 @@ import com.gp.base.screen.deliveries.FragmentDeliveries
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 
-class MainActivity : BaseActivity<MainViewModel>() {
+class MainActivity : BaseActivity() {
 
     private lateinit var viewModel: MainViewModel
 

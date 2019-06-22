@@ -32,7 +32,7 @@ import java.util.*
 import javax.inject.Inject
 
 
-class FragmentDeliveryDetails : BaseFragment<DeliveryDetailsViewModel>(), OnMapReadyCallback {
+class FragmentDeliveryDetails : BaseFragment(), OnMapReadyCallback {
 
     private lateinit var delivery: Delivery
 

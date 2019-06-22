@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.fragment_deliveries.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class FragmentDeliveries : BaseFragment<DeliveriesViewModel>(), DeliveryAdapter.OnItemClickListener {
+class FragmentDeliveries : BaseFragment(), DeliveryAdapter.OnItemClickListener {
 
     private val adapter = DeliveryAdapter(this)
     private var isFetchingData = false
@@ -73,9 +73,9 @@ class FragmentDeliveries : BaseFragment<DeliveriesViewModel>(), DeliveryAdapter.
             Observer<ApiResponse<List<Delivery>>> { response ->
                 isFetchingData = false
                 if (response.throwable != null) {
-                    showErrorDialog(positive = Action {
+                    showErrorDialog(positiveLabel = getString(R.string.label_retry), positive = Action {
                         getDeliveries(offset)
-                    }, negative = Action {
+                    }, negativeLabel = getString(R.string.label_cancel), negative = Action {
                         activity?.finish()
                     }, cancellable = false)
                 } else {

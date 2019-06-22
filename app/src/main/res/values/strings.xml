@@ -3,4 +3,8 @@
     <string name="title_delivery_details">Delivery Details</string>
 
     <string name="error_generic">Oops! Something went wrong</string>
+    <string name="error_retry">Oops! Something went wrong</string>
+
+    <string name="label_retry">Retry</string>
+    <string name="label_cancel">Cancel</string>
 </resources>

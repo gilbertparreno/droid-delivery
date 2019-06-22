@@ -9,4 +9,4 @@ import android.os.Bundle
 import java.lang.reflect.ParameterizedType
 
 
-abstract class BaseActivity<T : ViewModel> : AppCompatActivity()
+abstract class BaseActivity : AppCompatActivity()
